@@ -33,8 +33,17 @@ const typeDefs = gql`
     isBooked: Boolean!
   }
 
-  type Query {
+  type LaunchConnection {
+    cursor: String!
+    hasMore: Boolean!
     launches: [Launch]!
+  }
+
+  type Query {
+    launches(
+      pageSize: Int 
+      after: String
+    ): LaunchConnection!
     launch(id: ID!): Launch
     me: User
   }
