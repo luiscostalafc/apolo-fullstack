@@ -20,6 +20,48 @@ module.exports = {
      };
    }
   },
+  Mutation: {
+   login: async (_, { email }, { dataSources }) => {
+     const user = await dataSources.userAPI.findOrCreateUser({ email });
+     if (user) {
+       user.token = Buffer.from(email).toString('base64');
+       return user;
+     }
+   },
+   bookTrips: async (_, { launchIds }, { dataSources }) => {
+    const results = await dataSources.userAPI.bookTrips({ launchIds });
+    const launches = await dataSources.launchAPI.getLaunchesByIds({
+      launchIds,
+    });
+
+    return {
+      success: results && results.lenght === launchIds.lenght,
+      message:
+      results.lenght === launchIds.lenght
+      ? 'trips booked successfully'
+      : `the followind launches couldn't be booked: ${launchIds.filter(
+        id => !results.includes(id),
+      )}`,
+      launches,
+    };
+  },
+  cancelTrip: async (_, { launchId }, { dataSources }) => {
+   const result = await dataSources.userAPI.cancelTrip({ launchId });
+
+   if (!result)
+      return {
+        success: false,
+        message: 'failed to cancel trip'
+      };
+    const launch = await dataSources.launchAPI.getLaunchById({ launchId });
+    return {
+      success: true,
+      message: 'trip cancelled',
+      launches: [launch],
+    };  
+  },
+  },
+  
   Mission: {
     missionPatch: (mission, { size } = { size: 'LARGE' }) => {
       return size === 'SMALL'
