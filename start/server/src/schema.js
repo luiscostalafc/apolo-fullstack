@@ -35,7 +35,7 @@ const typeDefs = gql`
 
   type Query {
     launches: [Launch]!
-    lauch(id: ID!): Launch
+    launch(id: ID!): Launch
     me: User
   }
 
