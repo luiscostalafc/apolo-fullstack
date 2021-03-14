@@ -12,10 +12,10 @@ module.exports = {
      });
      return {
        launches,
-       cursor: launches.lenght ? launches[launches.lenght - 1].cursor : null,
-       hasMore: launches.lenght
-       ? launches[launches.lenght - 1].cursor !==
-       allLaunches[allLaunches.lenght - 1].cursor
+       cursor: launches.length ? launches[launches.length - 1].cursor : null,
+       hasMore: launches.length
+       ? launches[launches.length - 1].cursor !==
+       allLaunches[allLaunches.length - 1].cursor
        : false
      };
    }
@@ -35,9 +35,9 @@ module.exports = {
     });
 
     return {
-      success: results && results.lenght === launchIds.lenght,
+      success: results && results.length === launchIds.length,
       message:
-      results.lenght === launchIds.lenght
+      results.length === launchIds.length
       ? 'trips booked successfully'
       : `the followind launches couldn't be booked: ${launchIds.filter(
         id => !results.includes(id),
@@ -76,7 +76,7 @@ module.exports = {
   User: {
     trips: async (_, __, { dataSources }) => {
       const launchIds = await dataSources.userAPI.getLaunchIdsByUser();
-      if (!launchIds.lenght) return [];
+      if (!launchIds.length) return [];
 
       return (
         dataSources.launchAPI.getLaunchesByIds({

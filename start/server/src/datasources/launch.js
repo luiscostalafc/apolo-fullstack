@@ -6,13 +6,6 @@ class LaunchAPI extends RESTDataSource {
     this.baseURL = 'https://api.spacexdata.com/v2/';
   }
 
-  async getAllLaunches() {
-    const response = await this.get('launches');
-    return Array.isArray(response)
-    ? response.map(launch => this.launchReducer(launch))
-    : [];
-  }
-
   launchReducer(launch) {
     return {
       id: launch.flight_number || 0,
@@ -29,6 +22,15 @@ class LaunchAPI extends RESTDataSource {
         type: launch.rocket.rocket_type,
       },
     };
+  }
+
+  async getAllLaunches() {
+    const response = await this.get('launches');
+
+    // transform the raw launches to a more friendly
+    return Array.isArray(response)
+    ? response.map(launch => this.launchReducer(launch))
+    : [];
   }
 
   async getLaunchById({ launchId }) {
